@@ -30,7 +30,7 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
     minlength: 6,    
-    select: false,
+    select: true, // if You do select false then it doesn't return password then not able to check signin
   },
 
   firstName: {

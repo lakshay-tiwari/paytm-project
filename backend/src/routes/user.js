@@ -3,15 +3,8 @@ const router = express.Router();
 const { JWT_SECRET } = require("./../config");
 const jwt = require("jsonwebtoken");
 const { User } = require("./../db");
-const { z } = require("zod");
 const { authMiddleware } = require("../middleware");
-
-const signupSchema = z.object({
-  username: z.string(),
-  password: z.string(),
-  firstName: z.string(),
-  lastName: z.string()
-})
+const { signupSchema, signinSchema, updateSchema, filterSchema } = require("./../schema");
 
 router.post('/signup',async function(req,res,next){
   const body = req.body;
@@ -48,10 +41,6 @@ router.post('/signup',async function(req,res,next){
 
 })
 
-const signinSchema = z.object({
-  username: z.string(),
-  password: z.string()
-})
 
 
 router.post('/signin',async function(req,res,next){
@@ -93,11 +82,6 @@ router.post('/signin',async function(req,res,next){
 })
 
 
-const updateSchema = z.object({
-  password:  z.string().optional(),
-  firstName: z.string().optional(),
-  lastName:  z.string().optional()
-})
 
 
 router.put('/', authMiddleware ,async function(req,res){
@@ -106,7 +90,7 @@ router.put('/', authMiddleware ,async function(req,res){
   const { success } = updateSchema.safeParse(updateBody);
 
   if (!success){
-    return res.json({message: "given Schema not valid"});
+    return res.status(411).json({message: "Error while updating information"});
   }
 
 
@@ -122,10 +106,42 @@ router.put('/', authMiddleware ,async function(req,res){
 
 // route to get users from the backend, filterable via firstName, lastname
 
-// router.get('/bulk', authMiddleware,async function(req,res){
-//   const filter = req.query.filter;
+router.get('/bulk', authMiddleware,async function(req,res){
+  const filter = req.query.filter || "";
+  const { success } = filterSchema.safeParse(filter);
+
+  if (!success){
+    return res.status(411).json({message: "Error while fetching information"});
+  }
+
+
+  // $regex -> query selector -> used to find like things
+  // $options -> to make case insensitive
+
+  const usersList = await User.find({
+    $or: [
+      {
+        firstName: { $regex: filter , $options: "i" }
+      },
+      {
+        lastName: { $regex: filter , $options: "i" }
+      }
+    ]
+  })
+
+  const users = usersList.map((user)=>{
+    return {
+      firstName: user.firstName,
+      lastName: user.lastName, 
+      _id: user._id
+    };
+  })
   
-// })
+  res.status(200).json({
+    users
+  });
+
+})
 
 
 module.exports = router;
