@@ -58,6 +58,18 @@ userSchema.set('toJSON',{
   }
 })
 
+const accountSchema = new mongoose.Schema({
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: true
+  },
+  balance: {
+    type: Number,
+    required: true
+  }
+})
+
 
 // to create custom method that remove password
 // userSchema.methods.toSafeObject = function () { 
@@ -70,8 +82,14 @@ userSchema.set('toJSON',{
 // const newObj = user.toSafeObject(); this return everything except that you explicitly remove
 
 
+// note -> in real world you should not store 'floats' for balance in database
+// you store the integer which represent the inr value with decimal places like 33.33 store in 3333
+
+
 const User = mongoose.model('User', userSchema);
+const Account = mongoose.model('Account',accountSchema);
 
 module.exports = {
-  User
+  User,
+  Account
 }
