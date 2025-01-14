@@ -20,9 +20,15 @@ const updateSchema = z.object({
 
 const filterSchema = z.string();
 
+const transferSchema = z.object({
+  to: z.string(),
+  amount: z.number()
+})
+
 module.exports = {
   signupSchema, 
   signinSchema, 
   updateSchema, 
-  filterSchema
+  filterSchema,
+  transferSchema
 }

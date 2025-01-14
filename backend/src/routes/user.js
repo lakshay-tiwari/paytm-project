@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const { JWT_SECRET } = require("./../config");
 const jwt = require("jsonwebtoken");
-const { User } = require("./../db");
+const { User, Account } = require("./../db");
 const { authMiddleware } = require("../middleware");
 const { signupSchema, signinSchema, updateSchema, filterSchema } = require("./../schema");
 
@@ -25,6 +25,13 @@ router.post('/signup',async function(req,res,next){
 
   try{
     const addUser = await User.create(body);
+
+    // random money given for this 
+    await Account.create({
+      userId: addUser._id,
+      balance: 1 + Math.random()*10000
+    });
+
     const token = jwt.sign({
       userId: addUser._id 
     }, JWT_SECRET)  
@@ -40,8 +47,6 @@ router.post('/signup',async function(req,res,next){
   }
 
 })
-
-
 
 router.post('/signin',async function(req,res,next){
   const body = req.body; // body has username(unique) and password 
@@ -129,6 +134,7 @@ router.get('/bulk', authMiddleware,async function(req,res){
     ]
   })
 
+  // remove own name from array by user
   const users = usersList.map((user)=>{
     return {
       firstName: user.firstName,
@@ -145,3 +151,13 @@ router.get('/bulk', authMiddleware,async function(req,res){
 
 
 module.exports = router;
+
+// const users = usersList.map((user)=>{
+//   if (user._id!=req.userId){
+//     return {
+//       firstName: user.firstName,
+//       lastName: user.lastName, 
+//       _id: user._id
+//     }
+//   }
+// })
