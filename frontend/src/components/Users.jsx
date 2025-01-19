@@ -1,36 +1,34 @@
 import { UserProfile } from "./UserProfile";
 import { Button } from "./Button"
-
-const users = [{
-  firstName: "Lakshya",
-  lastName: "Tiwari",
-  _id: "1"
-},{
-  firstName: "Rahul",
-  lastName: "Mishra",
-  _id: "2"
-},{
-  firstName: "John",
-  lastName: "Doe",
-  _id: "3"
-},{
-  firstName: "Kshitij",
-  lastName: "Tiwari",
-  _id: "4"
-}];
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { useNavigate } from "react-router";
 
 export function Users(){
+  const [users,setUsers] = useState([]);
+  const [filter,setFilter] = useState('');
+  useEffect(()=>{
+    axios.get("http://localhost:3000/api/v1/user/bulk",{
+      headers: {
+        Authorization: localStorage.getItem("token")
+      }
+    },{
+      params: {
+        filter
+      }
+    }).then(res => setUsers(res.data.users))
+  },[filter])
   return (
     <>
       <div className="font-semibold px-5 mt-4">
         Users
       </div>
       <div className="px-5 mt-1">
-        <input type="text" className="border-2 w-full mt-1 shadow-sm rounded-lg p-2 border-slate-300 bg-slate-50" placeholder="Search Users..."/>
+        <input onChange={(e)=>setFilter(e.target.value)} type="text" className="border-2 w-full mt-1 shadow-sm rounded-lg p-2 border-slate-300 bg-slate-50" placeholder="Search Users..."/>
       </div>
       <div>
         {users.map((user)=>{
-          return <User user={user}/>
+          return <User user={user} key={user._id}/>
         })}
       </div>
     </>
@@ -38,6 +36,7 @@ export function Users(){
 }
 
 function User({user}){
+  const navigate = useNavigate();
 
   return (
     <div className="flex m-5 justify-between">
@@ -48,7 +47,7 @@ function User({user}){
         </div>
       </div>
       <div className="mr-5">
-        <Button label={"Send Money"}/>
+        <Button label={"Send Money"} onClick={()=> navigate("/send?id=" + user._id + "&name=" + user.firstName)}/>
       </div>
     </div>
   )

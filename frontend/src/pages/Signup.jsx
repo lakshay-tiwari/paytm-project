@@ -34,8 +34,9 @@ export const Signup = ()=>{
                 lastName
               })
               if (response.data.token){
-                const token = response.data.token;
-                localStorage.setItem("token" , `Bearer ${token}`);
+                const authToken = response.data.token;
+                const token = `Bearer ${authToken}`
+                localStorage.setItem("token" , token);
                 navigate("/dashboard");
               }
             }} label={"Sign up"} />

@@ -28,8 +28,9 @@ export const Signin = ()=>{
               password
             })
             if (response.data.token){
-              const token = response.data.token;
-              localStorage.setItem("token" , `Bearer ${token}`);
+              const authtoken = response.data.token;
+              const token = `Bearer ${authtoken}`
+              localStorage.setItem("token" , token);
               navigate("/dashboard");
             }
           }}/>
