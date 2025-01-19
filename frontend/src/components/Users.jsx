@@ -42,7 +42,7 @@ function User({user}){
   return (
     <div className="flex m-5 justify-between">
       <div className="flex items-center">
-        <UserProfile letter={user.firstName[0]} colour={"bg-slate-200"}/>
+        <UserProfile letter={user.firstName[0]} />
         <div className="m-4">
           {user.firstName} {user.lastName}
         </div>
