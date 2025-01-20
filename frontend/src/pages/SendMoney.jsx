@@ -9,6 +9,8 @@ export const SendMoney = ()=>{
   const name = queryParams.get("name");
   const [amount , setAmount] = useState(0);
   const navigate = useNavigate();
+  const [message , setMessage] = useState('');
+
   /*
     You can also do like this
       const [searchParams] = useSearchParams();
@@ -30,7 +32,8 @@ export const SendMoney = ()=>{
             </div>
             <div className="mt-2 mb-10">
               <input onChange={(e)=> setAmount(e.target.value)} type="text" className="border-2 w-full rounded-lg p-2" placeholder="Enter Amount"/>
-              <button onClick={()=>initiatePayment(id,amount,navigate)} className="w-full bg-green-500 text-white focus:outline-none focus:ring-4 focus:ring-green-400 rounded-lg h-8 mt-4 hover:bg-green-400">Initiate Transfer</button>
+              <button onClick={()=>initiatePayment(id,amount,navigate,setMessage)} className="w-full bg-green-500 text-white focus:outline-none focus:ring-4 focus:ring-green-400 rounded-lg h-8 mt-4 hover:bg-green-400">Initiate Transfer</button>
+              <div className="text-center mt-4 font-semibold">{message}</div>
             </div>
           </div>
         </div>
@@ -50,7 +53,7 @@ function UserLogo({letter}){
   )
 }
 
-async function initiatePayment(id,amount,navigate){
+async function initiatePayment(id,amount,navigate,setMessage){
 
   axios.post("http://localhost:3000/api/v1/account/transfer",{
     to: id,
@@ -61,8 +64,11 @@ async function initiatePayment(id,amount,navigate){
     }
   }).then((res)=> {
       console.log(res.data.message)
+        setMessage(res.data.message);
         navigate("/dashboard");
       })
-      .catch((err) => console.log("Error occurs", err));
+      .catch((err) =>{
+        setMessage(err.response.data.message)
+      });
   
 }
