@@ -7,8 +7,12 @@ import { useNavigate } from "react-router";
 export function Users(){
   const [users,setUsers] = useState([]);
   const [filter,setFilter] = useState('');
-
+  console.log(users);
   useEffect(()=>{
+    if (filter.trim() === ""){
+      setUsers([]);
+      return;
+    }
     axios.get("http://localhost:3000/api/v1/user/bulk?filter="+filter , {
       headers:{
         Authorization: localStorage.getItem("token")
@@ -47,7 +51,7 @@ function User({user}){
         </div>
       </div>
       <div className="mr-5">
-        <Button label={"Send Money"} onClick={()=> navigate("/send?id=" + user._id + "&name=" + user.firstName)}/>
+        <Button label={"Send Money"} onClick={()=> navigate("/send?id=" + user._id + "&name=" + user.firstName +"+"+ user.lastName)}/>
       </div>
     </div>
   )
