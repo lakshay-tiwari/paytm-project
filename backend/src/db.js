@@ -1,7 +1,9 @@
+require('dotenv').config()
 const mongoose = require("mongoose");
-const { MONGODB_URI } = require("./config");
+const MONGODB_URI = process.env.MONGODB_URI ;
 
 async function connectToDB(){
+  
   try{
     await mongoose.connect(`${MONGODB_URI}/paytm`);
     console.log("connection to db successfully");

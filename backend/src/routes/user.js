@@ -1,6 +1,7 @@
+require('dotenv').config();
+const JWT_SECRET = process.env.JWT_SECRET;
 const express = require("express");
 const router = express.Router();
-const { JWT_SECRET } = require("./../config");
 const jwt = require("jsonwebtoken");
 const { User, Account } = require("./../db");
 const { authMiddleware } = require("../middleware");

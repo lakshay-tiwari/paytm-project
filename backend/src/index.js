@@ -8,7 +8,7 @@ app.use(cors());
 
 app.use('/api/v1', rootRouter);
 
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 app.use((err, req, res, next) => {  // error handling middleware 
   console.error(err.stack)
