@@ -7,17 +7,17 @@ import { useNavigate } from "react-router";
 export function Users(){
   const [users,setUsers] = useState([]);
   const [filter,setFilter] = useState('');
+
   useEffect(()=>{
-    axios.get("http://localhost:3000/api/v1/user/bulk",{
-      headers: {
+    axios.get("http://localhost:3000/api/v1/user/bulk?filter="+filter , {
+      headers:{
         Authorization: localStorage.getItem("token")
       }
-    },{
-      params: {
-        filter
-      }
-    }).then(res => setUsers(res.data.users))
+    }).then((response)=>{
+      setUsers(response.data.finalUsers);
+    })
   },[filter])
+
   return (
     <>
       <div className="font-semibold px-5 mt-4">
@@ -37,7 +37,7 @@ export function Users(){
 
 function User({user}){
   const navigate = useNavigate();
-
+  if (user == null) return (<></>);
   return (
     <div className="flex m-5 justify-between">
       <div className="flex items-center">
