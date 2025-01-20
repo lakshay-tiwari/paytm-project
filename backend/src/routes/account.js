@@ -7,7 +7,8 @@ const { default: mongoose } = require("mongoose");
 
 router.get('/balance',authMiddleware,async function(req,res){
   const userId = req.userId;
-  const account = Account.findOne({
+
+  const account = await Account.findOne({
     userId
   })
 
@@ -20,7 +21,10 @@ router.get('/balance',authMiddleware,async function(req,res){
 })
 
 router.post('/transfer',authMiddleware, async function(req,res,next){
-  const { success } = transferSchema.safeParse(req.body);
+  const to = req.body.to ;
+  const amount = parseInt(req.body.amount);
+
+  const { success } = transferSchema.safeParse({ to , amount });
   if (!success){
     return res.status(400).json({ message: "Invalid inputs given"});
   }
@@ -36,14 +40,14 @@ router.post('/transfer',authMiddleware, async function(req,res,next){
   
     if (!account || account.balance < amount){
       await session.abortTransaction();
-      res.status(400).json({message: "Insufficient Balance"});
+      return res.status(400).json({message: "Insufficient Balance"});
     }
   
     const toAccount = await Account.findOne({ userId: to}).session(session);
   
     if (!toAccount){
       await session.abortTransaction();
-      res.status(400).json({message: "Invalid Account"});
+      return res.status(400).json({message: "Invalid Account"});
     }
   
     await Account.updateOne({ userId: req.userId }, { $inc: { balance: -amount }}).session(session);
@@ -51,7 +55,7 @@ router.post('/transfer',authMiddleware, async function(req,res,next){
   
     await session.commitTransaction();
     await session.endSession();
-    res.status(200).json({
+    return res.status(200).json({
       message: "Transfer Complete"
     })
 

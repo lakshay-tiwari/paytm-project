@@ -7,7 +7,7 @@ import { useNavigate } from "react-router";
 export function Users(){
   const [users,setUsers] = useState([]);
   const [filter,setFilter] = useState('');
-  console.log(users);
+  
   useEffect(()=>{
     if (filter.trim() === ""){
       setUsers([]);

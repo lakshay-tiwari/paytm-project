@@ -51,6 +51,7 @@ function UserLogo({letter}){
 }
 
 async function initiatePayment(id,amount,navigate){
+
   axios.post("http://localhost:3000/api/v1/account/transfer",{
     to: id,
     amount: amount

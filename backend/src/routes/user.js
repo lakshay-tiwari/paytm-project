@@ -35,8 +35,9 @@ router.post('/signup',async function(req,res,next){
 
     const token = jwt.sign({
       userId: addUser._id 
-    }, JWT_SECRET)  
+    }, JWT_SECRET);
 
+    console.log(token)
     res.status(200).json({
       message: "User created successfully",
       token: token
@@ -69,7 +70,7 @@ router.post('/signin',async function(req,res,next){
 
       const token = jwt.sign({
         userId: user._id
-      },JWT_SECRET)
+      },JWT_SECRET);
 
       res.json({
         message: 'User exist in database',
@@ -144,8 +145,12 @@ router.get('/bulk', authMiddleware,async function(req,res){
     };
   })
   
+  const finalUsers = users.filter((user)=>{
+    if (user._id != req.userId) return user ;
+  })
+
   res.status(200).json({
-    users
+    finalUsers
   });
 
 })

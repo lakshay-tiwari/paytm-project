@@ -12,7 +12,7 @@ export function Balance(){
     }).then((response) => {
       setLoading(true)
       setBalance(response.data.balance)
-    })
+    }).catch((err)=> console.log("some error occurs"));
   },[])
 
   if (loading === false) return (
