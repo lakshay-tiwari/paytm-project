@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState , useEffect } from "react"
 import { BottomWarning } from "../components/BottomWarning"
 import { Button } from "../components/Button"
 import { Heading } from "../components/Heading"
@@ -6,11 +6,46 @@ import { InputBox } from "../components/InputBox"
 import { SubHeading } from "../components/SubHeading"
 import axios from "axios"
 import { useNavigate } from "react-router"
+import { API_URLS } from "../config";
 
 export const Signin = ()=>{
   const [username , setUsername] = useState('');
   const [password , setPassword] = useState('');
+  const [loading,setLoading] = useState(false);
   const navigate = useNavigate();
+
+  useEffect(()=>{
+    const token = localStorage.getItem("token");
+
+    if (token == null){
+      setLoading(true);
+    }
+
+    axios.get(API_URLS.loginStatus,{
+      headers: {
+        Authorization: token 
+      }
+    }).then(()=>{
+      setLoading(true);
+      navigate("/dashboard");
+    }).catch(()=>{
+      setLoading(true);
+    })
+
+  },[]);
+
+
+  if (loading == false){
+    return (
+      <div className="flex justify-center h-screen bg-slate-200">
+        <div className="flex items-center">
+          <div className="font-bold text-3xl">
+            Loading...
+          </div>
+        </div>
+      </div>
+    )
+  }
   
   return (
     <div className="bg-slate-300 h-screen flex justify-center">
@@ -23,7 +58,7 @@ export const Signin = ()=>{
             <InputBox label={"Password"} placeholder={"123456"} onChange={(e)=>setPassword(e.target.value)} />
           </div>
           <Button label={"Signin"} onClick={async ()=>{
-            const response = await axios.post("http://localhost:3000/api/v1/user/signin",{
+            const response = await axios.post(API_URLS.signin,{
               username,
               password
             })

@@ -1,18 +1,20 @@
 import { useEffect, useState } from "react"
+import { API_URLS } from "../config";
 import axios from "axios"
 
 export function Balance(){
   const [loading,setLoading] = useState(false);
   const [balance,setBalance] = useState(0);
+  
   useEffect(()=>{
-    axios.get("http://localhost:3000/api/v1/account/balance",{
+    axios.get(API_URLS.accountBalance,{
       headers: {
         Authorization: localStorage.getItem("token")
       }
     }).then((response) => {
       setLoading(true)
       setBalance(response.data.balance)
-    }).catch((err)=> console.log("some error occurs"));
+    }).catch((err)=> console.log("Person might not log in || Some Error Occurs"));
   },[])
 
   if (loading === false) return (

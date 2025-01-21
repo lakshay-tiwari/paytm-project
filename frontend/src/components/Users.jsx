@@ -3,6 +3,7 @@ import { Button } from "./Button"
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router";
+import { API_URLS } from "../config";
 
 export function Users(){
   const [users,setUsers] = useState([]);
@@ -13,9 +14,13 @@ export function Users(){
       setUsers([]);
       return;
     }
-    axios.get("http://localhost:3000/api/v1/user/bulk?filter="+filter , {
+    axios.get(API_URLS.searchUser,{
       headers:{
         Authorization: localStorage.getItem("token")
+      }
+    },{
+      params:{
+        filter: filter
       }
     }).then((response)=>{
       setUsers(response.data.finalUsers);

@@ -7,6 +7,24 @@ const { User, Account } = require("./../db");
 const { authMiddleware } = require("../middleware");
 const { signupSchema, signinSchema, updateSchema, filterSchema } = require("./../schema");
 
+router.get('/me', authMiddleware, async function(req,res,next){
+  // req.userId
+  try {
+    const findUser = await User.findById(req.userId);
+    if (!findUser || !findUser.firstName){
+      return res.json({});
+    }
+    
+    res.json({
+      isLogged: true ,
+      firstName: findUser.firstName,
+    })
+
+  } catch (error) {
+    next(error);
+  }
+})
+
 router.post('/signup',async function(req,res,next){
   const body = req.body;
   const { success } = signupSchema.safeParse(body);

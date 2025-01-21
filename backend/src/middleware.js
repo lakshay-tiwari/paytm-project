@@ -24,7 +24,7 @@ function authMiddleware(req,res,next){
     }
   }
   catch(e){
-    res.status(403).json();
+    res.status(403).json({});
   }
 }
 

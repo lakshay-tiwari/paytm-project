@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useLocation, useNavigate, useSearchParams } from "react-router"
+import { API_URLS } from "../config";
 import axios from "axios";
 
 export const SendMoney = ()=>{
@@ -55,7 +56,7 @@ function UserLogo({letter}){
 
 async function initiatePayment(id,amount,navigate,setMessage){
 
-  axios.post("http://localhost:3000/api/v1/account/transfer",{
+  axios.post(API_URLS.transferBalance,{
     to: id,
     amount: amount
   },{
