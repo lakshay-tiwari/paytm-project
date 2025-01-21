@@ -1,5 +1,5 @@
 // src/config.js
-const BASE_URL = "https://paytm-project-7e2o.onrender.com";
+const BASE_URL = "https://paytm-project-7e2o.onrender.com/api/v1";
 
 export const API_URLS = {
   signup: `${BASE_URL}/user/signup`,
