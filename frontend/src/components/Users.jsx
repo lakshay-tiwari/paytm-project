@@ -14,13 +14,13 @@ export function Users(){
       setUsers([]);
       return;
     }
+    
     axios.get(API_URLS.searchUser,{
       headers:{
         Authorization: localStorage.getItem("token")
-      }
-    },{
-      params:{
-        filter: filter
+      },
+      params: {
+        filter
       }
     }).then((response)=>{
       setUsers(response.data.finalUsers);
