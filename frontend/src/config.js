@@ -1,6 +1,5 @@
 // src/config.js
-const BASE_URL = "http://localhost:3000/api/v1";
-
+const BASE_URL = "http://localhost:3000/api/v1"; // this is for local development (same for docker local development)
 export const API_URLS = {
   signup: `${BASE_URL}/user/signup`,
   signin: `${BASE_URL}/user/signin`,

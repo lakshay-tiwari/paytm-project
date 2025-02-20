@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  mongodb:
+    image: mongo
+    container_name: mongo_container
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+
+  backend:
+    build: ./backend
+    container_name: backend_container
+    depends_on:
+      - mongodb
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./backend:/app/be
+    environment:
+      - MONGODB_URI=mongodb://mongo_container:27017
+      - JWT_SECRET=myJWTsecret # this secret is not in production only for development
+
+  frontend: 
+    build: ./frontend
+    container_name: frontend_container
+    depends_on:
+      - backend
+    volumes:
+      - ./frontend:/app/fe
+    ports:
+      - "5173:5173"
+
+volumes:
+  mongodb_data:
