@@ -7,6 +7,7 @@ import { SubHeading } from "../components/SubHeading"
 import axios from "axios"
 import { useNavigate } from "react-router"
 import { API_URLS } from "../config";
+import toast from "react-hot-toast"
 
 export const Signin = ()=>{
   const [username , setUsername] = useState('');
@@ -58,16 +59,23 @@ export const Signin = ()=>{
             <InputBox label={"Password"} placeholder={"123456"} onChange={(e)=>setPassword(e.target.value)} />
           </div>
           <Button label={"Signin"} onClick={async ()=>{
-            const response = await axios.post(API_URLS.signin,{
-              username,
-              password
-            })
-            if (response.data.token){
-              const authtoken = response.data.token;
-              const token = `Bearer ${authtoken}`
-              localStorage.setItem("token" , token);
-              navigate("/dashboard");
+            try {
+              const response = await axios.post(API_URLS.signin,{
+                username,
+                password
+              })
+              toast.success('Signin Successfully!');
+              if (response.data.token){
+                const authtoken = response.data.token;
+                const token = `Bearer ${authtoken}`
+                localStorage.setItem("token" , token);
+                navigate("/dashboard");
+              }
+            } catch (error) {
+              const message = error.message;
+              toast.error(message);
             }
+
           }}/>
           <BottomWarning label={"Don't have an account"} to={"/signup"} buttonText={"Signup"} />
         </div>

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import { API_URLS } from "../config";
 import axios from "axios"
+import toast from "react-hot-toast";
 
 export function Balance(){
   const [loading,setLoading] = useState(false);
@@ -14,7 +15,10 @@ export function Balance(){
     }).then((response) => {
       setLoading(true)
       setBalance(response.data.balance)
-    }).catch((err)=> console.log("Person might not log in || Some Error Occurs"));
+    }).catch((err)=> {
+      toast.error('Person might not be log in or some error occurs');
+      console.log("Person might not log in || Some Error Occurs")
+    });
   },[])
 
   if (loading === false) return (

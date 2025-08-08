@@ -7,6 +7,7 @@ import { useEffect, useState } from "react"
 import axios from "axios"
 import { useNavigate } from "react-router"
 import { API_URLS } from "../config";
+import toast from "react-hot-toast"
 
 export const Signup = ()=>{
   const [firstName,setFirstName] = useState('');
@@ -62,17 +63,32 @@ export const Signup = ()=>{
               <InputBox label={"Password"} onChange={(e) => setPassword(e.target.value)} placeholder={"123456"}/>
             </div> 
             <Button onClick={async ()=>{
-              const response = await axios.post(API_URLS.signup,{
-                username,
-                password,
-                firstName,
-                lastName
-              })
-              if (response.data.token){
-                const authToken = response.data.token;
-                const token = `Bearer ${authToken}`
-                localStorage.setItem("token" , token);
-                navigate("/dashboard");
+              try {
+                const response = await axios.post(API_URLS.signup,{
+                  username,
+                  password,
+                  firstName,
+                  lastName
+                })
+                
+                if (response.data.token){
+                  const authToken = response.data.token;
+                  const token = `Bearer ${authToken}`
+                  localStorage.setItem("token" , token);
+                  toast.success('Signup Successfully!');
+                  navigate("/dashboard");
+                }
+              } catch (error) {
+                console.log(error.message)
+                const message = error?.response?.data?.message || '';
+                console.log(message)
+                if (message === 'user already exist!'){
+                  toast.error('User already exist!');
+                }
+                else {
+                  toast.error(error.message);
+                }
+                
               }
             }} label={"Sign up"} />
             <BottomWarning label={"Already have an account"} to={"/signin"} buttonText={"Sign in"}/>
