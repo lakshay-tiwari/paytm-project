@@ -7,7 +7,6 @@ import { useEffect, useState } from "react"
 import axios from "axios"
 import { useNavigate } from "react-router"
 import { API_URLS } from "../config";
-import toast from "react-hot-toast"
 
 export const Signup = ()=>{
   const [firstName,setFirstName] = useState('');
@@ -57,12 +56,29 @@ export const Signup = ()=>{
             <Heading label={"Signup"} />
             <SubHeading label={"Enter your information to create an account"} />
             <div>
-              <InputBox label={"First Name"} onChange={(e)=> setFirstName(e.target.value)} placeholder={"John"}/>
-              <InputBox label={"Last Name"} onChange={(e) => setLastName(e.target.value)} placeholder={"Doe"}/>
-              <InputBox label={"Email"} onChange={(e) => setUsername(e.target.value)} placeholder={"johndoe@email.com"}/>
-              <InputBox label={"Password"} onChange={(e) => setPassword(e.target.value)} placeholder={"123456"}/>
+              <InputBox label={"First Name"} value={firstName} onChange={(e)=> setFirstName(e.target.value)} placeholder={"John"}/>
+              <InputBox label={"Last Name"} value={lastName} onChange={(e) => setLastName(e.target.value)} placeholder={"Doe"}/>
+              <InputBox label={"Email"} value={username} onChange={(e) => setUsername(e.target.value)} placeholder={"johndoe@email.com"}/>
+              <InputBox label={"Password"} value={password} onChange={(e) => setPassword(e.target.value)} placeholder={"123456"}/>
             </div> 
             <Button onClick={async ()=>{
+<<<<<<< Updated upstream
+              const response = await axios.post(API_URLS.signup,{
+                username,
+                password,
+                firstName,
+                lastName
+              })
+              if (response.data.token){
+                const authToken = response.data.token;
+                const token = `Bearer ${authToken}`
+                localStorage.setItem("token" , token);
+                navigate("/dashboard");
+=======
+              if (password.length < 6){
+                toast.error('Password should be equal to or greater than 6 characters');
+                return ;
+              }
               try {
                 const response = await axios.post(API_URLS.signup,{
                   username,
@@ -88,7 +104,12 @@ export const Signup = ()=>{
                 else {
                   toast.error(error.message);
                 }
-                
+              } finally{
+                setUsername('');
+                setPassword('');
+                setFirstName('');
+                setLastName('');
+>>>>>>> Stashed changes
               }
             }} label={"Sign up"} />
             <BottomWarning label={"Already have an account"} to={"/signin"} buttonText={"Sign in"}/>

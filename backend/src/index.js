@@ -6,6 +6,10 @@ const cors = require('cors');
 app.use(express.json()); // express.json()-> body-parser is part of this in new express
 app.use(cors());
 
+app.get('/',(req,res)=>{
+  return res.status(200).send('Api is working');
+})
+
 app.use('/api/v1', rootRouter);
 
 const PORT = process.env.PORT || 3000;
