@@ -7,6 +7,7 @@ import { useEffect, useState } from "react"
 import axios from "axios"
 import { useNavigate } from "react-router"
 import { API_URLS } from "../config";
+import { toast } from 'react-hot-toast'
 
 export const Signup = ()=>{
   const [firstName,setFirstName] = useState('');
@@ -82,9 +83,8 @@ export const Signup = ()=>{
                   navigate("/dashboard");
                 }
               } catch (error) {
-                console.log(error.message)
                 const message = error?.response?.data?.message || '';
-                console.log(message)
+                
                 if (message === 'user already exist!'){
                   toast.error('User already exist!');
                 }

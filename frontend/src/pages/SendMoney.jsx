@@ -64,7 +64,6 @@ async function initiatePayment(id,amount,navigate,setMessage){
       Authorization: localStorage.getItem("token")
     }
   }).then((res)=> {
-      console.log(res.data.message)
         setMessage(res.data.message);
         navigate("/dashboard");
       })
