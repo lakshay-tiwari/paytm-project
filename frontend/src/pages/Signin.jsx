@@ -54,10 +54,11 @@ export const Signin = ()=>{
           <div>
             <Heading label={"Signin"}/>
             <SubHeading label={"Enter your credentials to access your account"}/>
-            <InputBox label={"Email"} placeholder={"johndoe@email.com"} onChange={(e)=> setUsername(e.target.value)}/>
-            <InputBox label={"Password"} placeholder={"123456"} onChange={(e)=>setPassword(e.target.value)} />
+            <InputBox label={"Email"} placeholder={"johndoe@email.com"} value={username} onChange={(e)=> setUsername(e.target.value)}/>
+            <InputBox label={"Password"} placeholder={"123456"} value={password} onChange={(e)=>setPassword(e.target.value)} />
           </div>
           <Button label={"Signin"} onClick={async ()=>{
+<<<<<<< Updated upstream
             const response = await axios.post(API_URLS.signin,{
               username,
               password
@@ -67,6 +68,35 @@ export const Signin = ()=>{
               const token = `Bearer ${authtoken}`
               localStorage.setItem("token" , token);
               navigate("/dashboard");
+=======
+            if (password.length < 6){
+              toast.error('Password should be equal to or greater than 6 characters');
+              return;
+            }
+            try {
+              const response = await axios.post(API_URLS.signin,{
+                username,
+                password
+              })
+              const message = response.data.message;
+              if (message === 'User does not exist in database'){
+                toast.error('User does not exist in database');
+                return;
+              }
+              toast.success('Signin Successfully!');
+              if (response.data.token){
+                const authtoken = response.data.token;
+                const token = `Bearer ${authtoken}`
+                localStorage.setItem("token" , token);
+                navigate("/dashboard");
+              }
+            } catch (error) {
+              const message = error.message;
+              toast.error(message);
+            } finally{
+                setUsername('');
+                setPassword('');
+>>>>>>> Stashed changes
             }
           }}/>
           <BottomWarning label={"Don't have an account"} to={"/signup"} buttonText={"Signup"} />

@@ -1,5 +1,10 @@
 // src/config.js
+<<<<<<< Updated upstream
 const BASE_URL = "http://localhost:3000/api/v1"; // this is for local development (same for docker local development)
+=======
+const BASE_URL = "http://localhost:3000/api/v1";
+
+>>>>>>> Stashed changes
 export const API_URLS = {
   signup: `${BASE_URL}/user/signup`,
   signin: `${BASE_URL}/user/signin`,
