@@ -1,5 +1,6 @@
 // src/config.js
-const BASE_URL = "http://localhost:3000/api/v1";
+const URL = import.meta.env.VITE_BACKEND_URI || 'http://localhost:3000';
+const BASE_URL = `${URL}/api/v1`;
 
 export const API_URLS = {
   signup: `${BASE_URL}/user/signup`,
