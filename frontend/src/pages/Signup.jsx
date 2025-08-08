@@ -62,19 +62,6 @@ export const Signup = ()=>{
               <InputBox label={"Password"} value={password} onChange={(e) => setPassword(e.target.value)} placeholder={"123456"}/>
             </div> 
             <Button onClick={async ()=>{
-<<<<<<< Updated upstream
-              const response = await axios.post(API_URLS.signup,{
-                username,
-                password,
-                firstName,
-                lastName
-              })
-              if (response.data.token){
-                const authToken = response.data.token;
-                const token = `Bearer ${authToken}`
-                localStorage.setItem("token" , token);
-                navigate("/dashboard");
-=======
               if (password.length < 6){
                 toast.error('Password should be equal to or greater than 6 characters');
                 return ;
@@ -109,7 +96,6 @@ export const Signup = ()=>{
                 setPassword('');
                 setFirstName('');
                 setLastName('');
->>>>>>> Stashed changes
               }
             }} label={"Sign up"} />
             <BottomWarning label={"Already have an account"} to={"/signin"} buttonText={"Sign in"}/>
